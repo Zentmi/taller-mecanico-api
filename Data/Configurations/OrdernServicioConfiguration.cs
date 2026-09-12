@@ -18,11 +18,40 @@ public class OrdenServicioConfiguration : IEntityTypeConfiguration<OrdenServicio
         builder
             .HasOne<Usuario>()
             .WithMany()
-            .HasForeignKey(o => o.UsuarioOrdenServicio);
+            .HasForeignKey(o => o.UsuarioOrdenServicio)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
            .HasOne<Unidad>()
            .WithMany()
-           .HasForeignKey(o => o.IdVehiculo);
+           .HasForeignKey(o => o.IdVehiculo)
+           .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .Property(o => o.IdOrdenServicio)
+            .HasMaxLength(20)
+            .IsRequired();
+
+        builder
+            .HasIndex(o => o.IdOrdenServicio)
+            .IsUnique();
+
+        builder
+            .Property(o => o.FechaOrdenSolicitud)
+            .HasDefaultValueSql("GETUTCDATE()")
+            .IsRequired();
+
+        builder
+            .Property(o => o.StatusOrdenServicio)
+            .HasConversion<string>()
+            .HasMaxLength(30)
+            .IsRequired();
+
+        builder
+            .Property(o => o.ObervacionOrdenServicio)
+            .HasMaxLength(500)
+            .IsRequired();
+
+
     }
 }

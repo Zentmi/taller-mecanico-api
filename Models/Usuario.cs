@@ -1,6 +1,8 @@
 
 
 
+using TallerMecanico.Models.Enums;
+
 namespace TallerMecanico.Models;
 
 public class Usuario
@@ -13,6 +15,8 @@ public class Usuario
 
     public string PasswordHash { get; set; } = string.Empty;
 
-    public string RolUsuario { get; set; } = string.Empty;
+    public RolUsuario RolUsuario { get; set; }
+
+    public bool Activo { get; set; } = true;
 
 }

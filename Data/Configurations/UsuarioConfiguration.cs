@@ -27,8 +27,21 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
 
         builder
             .Property(u => u.RolUsuario)
+            .HasConversion<string>()
             .HasMaxLength(10)
             .IsRequired();
+
+        builder
+            .Property(U => U.PasswordHash)
+            .IsRequired();
+
+        builder
+            .Property(u => u.Activo)
+            .HasDefaultValue(true)
+            .IsRequired();
+
+        builder
+            .HasQueryFilter(u => u.Activo);
     }
 
 }

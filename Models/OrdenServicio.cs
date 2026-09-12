@@ -1,6 +1,8 @@
 
 
 
+using TallerMecanico.Models.Enums;
+
 namespace TallerMecanico.Models;
 
 public class OrdenServicio
@@ -11,7 +13,7 @@ public class OrdenServicio
 
     public DateTime FechaOrdenSolicitud { get; set; }
 
-    public string StatusOrdenServicio { get; set; } = string.Empty;
+    public StatusOrden StatusOrdenServicio { get; set; }
 
     public int UsuarioOrdenServicio { get; set; }
 

@@ -1,6 +1,8 @@
 
 
 
+using TallerMecanico.Models.Enums;
+
 namespace TallerMecanico.Models;
 
 public class Servicio
@@ -17,13 +19,13 @@ public class Servicio
 
     public decimal CostoServicio { get; set; }
 
-    public DateTime FechaInicioServicio { get; set; }
+    public DateTime? FechaInicioServicio { get; set; }
 
-    public DateTime FechaFinServicio { get; set; }
+    public DateTime? FechaFinServicio { get; set; }
 
     public DateTime? FechaCancelacionServicio { get; set; }
 
-    public string StatusServicio { get; set; } = string.Empty;
+    public StatusServicio StatusServicio { get; set; }
 
 
 }

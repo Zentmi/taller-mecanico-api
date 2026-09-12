@@ -1,6 +1,8 @@
 
 
 
+using TallerMecanico.Models.Enums;
+
 namespace TallerMecanico.Models;
 
 public class Unidad
@@ -14,11 +16,13 @@ public class Unidad
 
     public string ColorVehiculo { get; set; } = string.Empty;
 
-    public string CombustibleVehiculo { get; set; } = string.Empty;
+    public TipoCombustible CombustibleVehiculo { get; set; }
     public int AniooVehiculo { get; set; }
 
     public string PlacasVehiculo { get; set; } = string.Empty;
 
     public DateTime FechaRegistroVehiculo { get; set; }
+
+    public bool Activo { get; set; } = true;
 
 }
