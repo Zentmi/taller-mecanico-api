@@ -17,7 +17,7 @@ public class Unidad
     public string ColorVehiculo { get; set; } = string.Empty;
 
     public TipoCombustible CombustibleVehiculo { get; set; }
-    public int AniooVehiculo { get; set; }
+    public int AnioVehiculo { get; set; }
 
     public string PlacasVehiculo { get; set; } = string.Empty;
 
