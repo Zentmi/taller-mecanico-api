@@ -42,6 +42,15 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
 
         builder
             .HasQueryFilter(u => u.Activo);
+
+        builder
+            .Property(u => u.NombreUsuario)
+            .HasMaxLength(30)
+            .IsRequired();
+
+        builder
+            .HasIndex(u => u.NombreUsuario)
+            .IsUnique();
     }
 
 }

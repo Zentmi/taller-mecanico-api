@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TallerMecanico.Data;
 
@@ -11,9 +12,11 @@ using TallerMecanico.Data;
 namespace TallerMecanico.Migrations
 {
     [DbContext(typeof(TallerMecanicoContext))]
-    partial class TallerMecanicoContextModelSnapshot : ModelSnapshot
+    [Migration("20260913215649_AddNombreUsuario")]
+    partial class AddNombreUsuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
