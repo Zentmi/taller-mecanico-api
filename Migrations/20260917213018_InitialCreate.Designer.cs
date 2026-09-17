@@ -12,7 +12,7 @@ using TallerMecanico.Data;
 namespace TallerMecanico.Migrations
 {
     [DbContext(typeof(TallerMecanicoContext))]
-    [Migration("20260917201716_InitialCreate")]
+    [Migration("20260917213018_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -96,13 +96,13 @@ namespace TallerMecanico.Migrations
                     b.Property<DateTime?>("FechaInicioServicio")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FkOrden")
-                        .HasColumnType("int");
-
                     b.Property<string>("IdServicio")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("PkOrden")
+                        .HasColumnType("int");
 
                     b.Property<string>("StatusServicio")
                         .IsRequired()
@@ -116,10 +116,10 @@ namespace TallerMecanico.Migrations
 
                     b.HasKey("PkServicio");
 
-                    b.HasIndex("FkOrden");
-
                     b.HasIndex("IdServicio")
                         .IsUnique();
+
+                    b.HasIndex("PkOrden");
 
                     b.ToTable("Servicios", null, t =>
                         {
@@ -252,7 +252,7 @@ namespace TallerMecanico.Migrations
                 {
                     b.HasOne("TallerMecanico.Models.OrdenServicio", "OrdenServicio")
                         .WithMany()
-                        .HasForeignKey("FkOrden")
+                        .HasForeignKey("PkOrden")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

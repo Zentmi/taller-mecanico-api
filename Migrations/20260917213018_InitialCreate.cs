@@ -87,7 +87,7 @@ namespace TallerMecanico.Migrations
                     PkServicio = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdServicio = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    FkOrden = table.Column<int>(type: "int", nullable: false),
+                    PkOrden = table.Column<int>(type: "int", nullable: false),
                     TipoServicio = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DetalleServicio = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     CostoServicio = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
@@ -101,8 +101,8 @@ namespace TallerMecanico.Migrations
                     table.PrimaryKey("PK_Servicios", x => x.PkServicio);
                     table.CheckConstraint("CK_Servicio_Costo", "[CostoServicio] >= 0");
                     table.ForeignKey(
-                        name: "FK_Servicios_OrdenesServicio_FkOrden",
-                        column: x => x.FkOrden,
+                        name: "FK_Servicios_OrdenesServicio_PkOrden",
+                        column: x => x.PkOrden,
                         principalTable: "OrdenesServicio",
                         principalColumn: "PkOrden",
                         onDelete: ReferentialAction.Restrict);
@@ -125,15 +125,15 @@ namespace TallerMecanico.Migrations
                 column: "UsuarioIdOrdenServicio");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Servicios_FkOrden",
-                table: "Servicios",
-                column: "FkOrden");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Servicios_IdServicio",
                 table: "Servicios",
                 column: "IdServicio",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Servicios_PkOrden",
+                table: "Servicios",
+                column: "PkOrden");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Unidades_PlacasVehiculo",
