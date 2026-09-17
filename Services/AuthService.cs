@@ -34,7 +34,7 @@ public class AuthService
         _jwtOptions = jwtOptions.Value;
     }
 
-    public async Task<Usuario?> RegisterAsync(RegisterRequest request)
+    public async Task<Usuario?> RegisterAsync(RegistroRequest request)
     {
         var usuarioExiste = await _context.Usuarios
             .AnyAsync(u => u.NombreUsuario == request.NombreUsuario);

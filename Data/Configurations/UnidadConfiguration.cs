@@ -1,7 +1,7 @@
 
 
 
-using System.IO.Compression;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TallerMecanico.Models;
@@ -39,6 +39,11 @@ public class UnidadConfiguration : IEntityTypeConfiguration<Unidad>
             .IsRequired();
 
         builder
+            .HasIndex(u => u.PlacasVehiculo)
+            .IsUnique()
+            .HasFilter("[Activo] = 1");
+
+        builder
             .Property(u => u.FechaRegistroVehiculo)
             .HasDefaultValueSql("GETUTCDATE()")
             .IsRequired();
@@ -53,7 +58,5 @@ public class UnidadConfiguration : IEntityTypeConfiguration<Unidad>
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder
-            .HasQueryFilter(u => u.Activo);
     }
 }

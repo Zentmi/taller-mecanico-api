@@ -7,6 +7,6 @@ public enum StatusServicio
 {
     Pendiente,
     EnProceso,
-    Completada,
-    Cancelada
+    Completado,
+    Cancelado
 }

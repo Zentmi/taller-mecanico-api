@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TallerMecanico.DTOs.Auth;
 
-public class RegisterRequest
+public class RegistroRequest
 {
     [Required]
     [StringLength(30, MinimumLength = 3)]

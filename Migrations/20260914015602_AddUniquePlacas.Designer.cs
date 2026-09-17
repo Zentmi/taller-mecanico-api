@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TallerMecanico.Data;
 
@@ -11,9 +12,11 @@ using TallerMecanico.Data;
 namespace TallerMecanico.Migrations
 {
     [DbContext(typeof(TallerMecanicoContext))]
-    partial class TallerMecanicoContextModelSnapshot : ModelSnapshot
+    [Migration("20260914015602_AddUniquePlacas")]
+    partial class AddUniquePlacas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,16 +46,17 @@ namespace TallerMecanico.Migrations
                     b.Property<int>("IdVehiculo")
                         .HasColumnType("int");
 
-                    b.Property<string>("ObservacionOrdenServicio")
+                    b.Property<string>("ObervacionOrdenServicio")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("StatusOrden")
+                    b.Property<string>("StatusOrdenServicio")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("UsuarioIdOrdenServicio")
+                    b.Property<int>("UsuarioOrdenServicio")
                         .HasColumnType("int");
 
                     b.HasKey("PkOrden");
@@ -62,7 +66,7 @@ namespace TallerMecanico.Migrations
 
                     b.HasIndex("IdVehiculo");
 
-                    b.HasIndex("UsuarioIdOrdenServicio");
+                    b.HasIndex("UsuarioOrdenServicio");
 
                     b.ToTable("OrdenesServicio");
                 });
@@ -215,8 +219,8 @@ namespace TallerMecanico.Migrations
 
                     b.Property<string>("RolUsuario")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("IdUsuario");
 
@@ -228,21 +232,17 @@ namespace TallerMecanico.Migrations
 
             modelBuilder.Entity("TallerMecanico.Models.OrdenServicio", b =>
                 {
-                    b.HasOne("TallerMecanico.Models.Unidad", "Unidad")
+                    b.HasOne("TallerMecanico.Models.Unidad", null)
                         .WithMany()
                         .HasForeignKey("IdVehiculo")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TallerMecanico.Models.Usuario", "Usuario")
+                    b.HasOne("TallerMecanico.Models.Usuario", null)
                         .WithMany()
-                        .HasForeignKey("UsuarioIdOrdenServicio")
+                        .HasForeignKey("UsuarioOrdenServicio")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Unidad");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("TallerMecanico.Models.Servicio", b =>

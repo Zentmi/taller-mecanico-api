@@ -16,16 +16,16 @@ public class OrdenServicioConfiguration : IEntityTypeConfiguration<OrdenServicio
             .HasKey(o => o.PkOrden);
 
         builder
-            .HasOne<Usuario>()
+            .HasOne(o => o.Usuario)
             .WithMany()
-            .HasForeignKey(o => o.UsuarioOrdenServicio)
+            .HasForeignKey(o => o.UsuarioIdOrdenServicio)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-           .HasOne<Unidad>()
-           .WithMany()
-           .HasForeignKey(o => o.IdVehiculo)
-           .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(o => o.Unidad)
+            .WithMany()
+            .HasForeignKey(o => o.IdVehiculo)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .Property(o => o.IdOrdenServicio)
@@ -42,15 +42,15 @@ public class OrdenServicioConfiguration : IEntityTypeConfiguration<OrdenServicio
             .IsRequired();
 
         builder
-            .Property(o => o.StatusOrdenServicio)
+            .Property(o => o.StatusOrden)
             .HasConversion<string>()
             .HasMaxLength(30)
             .IsRequired();
 
         builder
-            .Property(o => o.ObervacionOrdenServicio)
+            .Property(o => o.ObservacionOrdenServicio)
             .HasMaxLength(500)
-            .IsRequired();
+            .IsRequired(false);
 
 
     }

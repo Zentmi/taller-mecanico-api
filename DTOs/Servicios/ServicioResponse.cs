@@ -1,11 +1,9 @@
 
 
 
-using TallerMecanico.Models.Enums;
+namespace TallerMecanico.DTOs.Servicios;
 
-namespace TallerMecanico.Models;
-
-public class Servicio
+public class ServicioResponse
 {
     public int PkServicio { get; set; }
 
@@ -25,7 +23,5 @@ public class Servicio
 
     public DateTime? FechaCancelacionServicio { get; set; }
 
-    public StatusServicio StatusServicio { get; set; }
-
-    public OrdenServicio OrdenServicio { get; set; } = null!;
+    public string StatusServicio { get; set; } = string.Empty;
 }

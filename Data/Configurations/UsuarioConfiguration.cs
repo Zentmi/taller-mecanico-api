@@ -28,7 +28,7 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
         builder
             .Property(u => u.RolUsuario)
             .HasConversion<string>()
-            .HasMaxLength(10)
+            .HasMaxLength(15)
             .IsRequired();
 
         builder
@@ -40,8 +40,6 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder
-            .HasQueryFilter(u => u.Activo);
 
         builder
             .Property(u => u.NombreUsuario)
