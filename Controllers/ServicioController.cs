@@ -18,6 +18,59 @@ public class ServicioController : ControllerBase
         _servicioService = servicioService;
     }
 
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> ObtenerTodos()
+    {
+        var servicios = await _servicioService.ObtenerTodosAsync();
+
+        var response = servicios.Select(servicio => new ServicioResponse
+        {
+            PkServicio = servicio.PkServicio,
+            IdServicio = servicio.IdServicio,
+            PkOrden = servicio.PkOrden,
+            TipoServicio = servicio.TipoServicio,
+            DetalleServicio = servicio.DetalleServicio,
+            CostoServicio = servicio.CostoServicio,
+            FechaInicioServicio = servicio.FechaInicioServicio,
+            FechaFinServicio = servicio.FechaFinServicio,
+            FechaCancelacionServicio = servicio.FechaCancelacionServicio,
+            StatusServicio = servicio.StatusServicio.ToString()
+        });
+
+        return Ok(response);
+    }
+
+
+    [Authorize]
+    [HttpGet("{idServicio}")]
+    public async Task<IActionResult> ObtenerPorId(int idServicio)
+    {
+        var servicio = await _servicioService.ObtenerPorIdAsync(idServicio);
+
+        if (servicio is null)
+        {
+            return NotFound(new
+            {
+                message = "El servicio no existe."
+            });
+        }
+
+        return Ok(new ServicioResponse
+        {
+            PkServicio = servicio.PkServicio,
+            IdServicio = servicio.IdServicio,
+            PkOrden = servicio.PkOrden,
+            TipoServicio = servicio.TipoServicio,
+            DetalleServicio = servicio.DetalleServicio,
+            CostoServicio = servicio.CostoServicio,
+            FechaInicioServicio = servicio.FechaInicioServicio,
+            FechaFinServicio = servicio.FechaFinServicio,
+            FechaCancelacionServicio = servicio.FechaCancelacionServicio,
+            StatusServicio = servicio.StatusServicio.ToString()
+        });
+    }
+
     [Authorize(Roles = "Administrador")]
     [HttpPost]
     public async Task<IActionResult> Crear(CreateServicioRequest request)

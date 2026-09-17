@@ -83,6 +83,26 @@ public class OrdenServicioController : ControllerBase
     }
 
     [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> ObtenerTodos()
+    {
+        var ordenes = await _ordenServicioService.ObtenerTodosAsync();
+
+        var response = ordenes.Select(orden => new OrdenServicioResponse
+        {
+            PkOrden = orden.PkOrden,
+            IdOrdenServicio = orden.IdOrdenServicio,
+            FechaOrdenSolicitud = orden.FechaOrdenSolicitud,
+            StatusOrden = orden.StatusOrden.ToString(),
+            ObservacionOrdenServicio = orden.ObservacionOrdenServicio,
+            IdVehiculo = orden.IdVehiculo
+        });
+
+        return Ok(response);
+    }
+
+
+    [Authorize]
     [HttpGet("{idOrden}")]
     public async Task<IActionResult> ObtenerPorId(int idOrden)
     {

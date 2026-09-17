@@ -61,6 +61,13 @@ public class OrdenServicioService
             .FirstOrDefaultAsync(o => o.PkOrden == idOrden);
     }
 
+    public async Task<List<OrdenServicio>> ObtenerTodosAsync()
+    {
+        return await _context.OrdenesServicio
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public async Task<(OrdenServicio? Orden, string? Error)> CancelarAsync(
     int idOrden)
     {

@@ -18,6 +18,19 @@ public class ServicioService
         _context = context;
     }
 
+    public async Task<Servicio?> ObtenerPorIdAsync(int idServicio)
+    {
+        return await _context.Servicios
+            .FirstOrDefaultAsync(s => s.PkServicio == idServicio);
+    }
+
+    public async Task<List<Servicio>> ObtenerTodosAsync()
+    {
+        return await _context.Servicios
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public async Task<(Servicio? Servicio, string? Error)> CrearAsync(
         CreateServicioRequest request)
     {
