@@ -22,7 +22,7 @@ public class ServicioService
         CreateServicioRequest request)
     {
         var orden = await _context.OrdenesServicio
-            .FirstOrDefaultAsync(o => o.PkOrden == request.FkOrden);
+            .FirstOrDefaultAsync(o => o.PkOrden == request.PkOrden);
 
         if (orden is null)
             return (null, "La orden de servicio no existe.");
@@ -32,7 +32,7 @@ public class ServicioService
 
         var servicio = new Servicio
         {
-            FkOrden = request.FkOrden,
+            PkOrden = request.PkOrden,
             TipoServicio = request.TipoServicio,
             DetalleServicio = request.DetalleServicio,
             CostoServicio = request.CostoServicio,
@@ -61,7 +61,7 @@ public class ServicioService
             return (null, "El servicio no existe.");
 
         var orden = await _context.OrdenesServicio
-            .FirstOrDefaultAsync(o => o.PkOrden == servicio.FkOrden);
+            .FirstOrDefaultAsync(o => o.PkOrden == servicio.PkOrden);
 
         if (orden is null)
             return (null, "La orden de servicio no existe.");
@@ -112,7 +112,7 @@ public class ServicioService
             servicio.FechaCancelacionServicio = DateTime.UtcNow;
         }
 
-        await ActualizarEstadoOrdenAsync(servicio.FkOrden);
+        await ActualizarEstadoOrdenAsync(servicio.PkOrden);
 
         await _context.SaveChangesAsync();
 
@@ -131,7 +131,7 @@ public class ServicioService
             return;
 
         var servicios = await _context.Servicios
-            .Where(s => s.FkOrden == fkOrden)
+            .Where(s => s.PkOrden == fkOrden)
             .ToListAsync();
 
         if (servicios.Count == 0)

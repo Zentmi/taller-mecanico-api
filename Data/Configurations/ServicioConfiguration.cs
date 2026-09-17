@@ -17,7 +17,7 @@ public class ServicioConfiguration : IEntityTypeConfiguration<Servicio>
         builder
             .HasOne(s => s.OrdenServicio)
             .WithMany()
-            .HasForeignKey(s => s.FkOrden)
+            .HasForeignKey(s => s.PkOrden)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder

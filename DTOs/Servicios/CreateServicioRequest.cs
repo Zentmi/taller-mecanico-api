@@ -8,7 +8,7 @@ namespace TallerMecanico.DTOs.Servicios;
 public class CreateServicioRequest
 {
 
-    public int FkOrden { get; set; }
+    public int PkOrden { get; set; }
 
     [Required]
     [StringLength(50)]

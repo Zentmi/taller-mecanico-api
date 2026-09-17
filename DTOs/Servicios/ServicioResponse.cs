@@ -9,7 +9,7 @@ public class ServicioResponse
 
     public string IdServicio { get; set; } = string.Empty;
 
-    public int FkOrden { get; set; }
+    public int PkOrden { get; set; }
 
     public string TipoServicio { get; set; } = string.Empty;
 

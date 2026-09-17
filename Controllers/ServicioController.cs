@@ -36,7 +36,7 @@ public class ServicioController : ControllerBase
         {
             PkServicio = servicio.PkServicio,
             IdServicio = servicio.IdServicio,
-            FkOrden = servicio.FkOrden,
+            PkOrden = servicio.PkOrden,
             TipoServicio = servicio.TipoServicio,
             DetalleServicio = servicio.DetalleServicio,
             CostoServicio = servicio.CostoServicio,
@@ -69,7 +69,7 @@ public class ServicioController : ControllerBase
         {
             PkServicio = servicio.PkServicio,
             IdServicio = servicio.IdServicio,
-            FkOrden = servicio.FkOrden,
+            PkOrden = servicio.PkOrden,
             TipoServicio = servicio.TipoServicio,
             DetalleServicio = servicio.DetalleServicio,
             CostoServicio = servicio.CostoServicio,
