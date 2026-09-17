@@ -119,10 +119,10 @@ public class ServicioService
         return (servicio, null);
     }
 
-    private async Task ActualizarEstadoOrdenAsync(int fkOrden)
+    private async Task ActualizarEstadoOrdenAsync(int pkOrden)
     {
         var orden = await _context.OrdenesServicio
-            .FirstOrDefaultAsync(o => o.PkOrden == fkOrden);
+            .FirstOrDefaultAsync(o => o.PkOrden == pkOrden);
 
         if (orden is null)
             return;
@@ -131,7 +131,7 @@ public class ServicioService
             return;
 
         var servicios = await _context.Servicios
-            .Where(s => s.PkOrden == fkOrden)
+            .Where(s => s.PkOrden == pkOrden)
             .ToListAsync();
 
         if (servicios.Count == 0)
