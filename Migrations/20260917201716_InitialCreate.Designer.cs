@@ -12,8 +12,8 @@ using TallerMecanico.Data;
 namespace TallerMecanico.Migrations
 {
     [DbContext(typeof(TallerMecanicoContext))]
-    [Migration("20260916021632_IncreaseRolUsuarioLength")]
-    partial class IncreaseRolUsuarioLength
+    [Migration("20260917201716_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,17 +46,16 @@ namespace TallerMecanico.Migrations
                     b.Property<int>("IdVehiculo")
                         .HasColumnType("int");
 
-                    b.Property<string>("ObervacionOrdenServicio")
-                        .IsRequired()
+                    b.Property<string>("ObservacionOrdenServicio")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("StatusOrdenServicio")
+                    b.Property<string>("StatusOrden")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("UsuarioOrdenServicio")
+                    b.Property<int>("UsuarioIdOrdenServicio")
                         .HasColumnType("int");
 
                     b.HasKey("PkOrden");
@@ -66,7 +65,7 @@ namespace TallerMecanico.Migrations
 
                     b.HasIndex("IdVehiculo");
 
-                    b.HasIndex("UsuarioOrdenServicio");
+                    b.HasIndex("UsuarioIdOrdenServicio");
 
                     b.ToTable("OrdenesServicio");
                 });
@@ -232,26 +231,32 @@ namespace TallerMecanico.Migrations
 
             modelBuilder.Entity("TallerMecanico.Models.OrdenServicio", b =>
                 {
-                    b.HasOne("TallerMecanico.Models.Unidad", null)
+                    b.HasOne("TallerMecanico.Models.Unidad", "Unidad")
                         .WithMany()
                         .HasForeignKey("IdVehiculo")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TallerMecanico.Models.Usuario", null)
+                    b.HasOne("TallerMecanico.Models.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioOrdenServicio")
+                        .HasForeignKey("UsuarioIdOrdenServicio")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Unidad");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("TallerMecanico.Models.Servicio", b =>
                 {
-                    b.HasOne("TallerMecanico.Models.OrdenServicio", null)
+                    b.HasOne("TallerMecanico.Models.OrdenServicio", "OrdenServicio")
                         .WithMany()
                         .HasForeignKey("FkOrden")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("OrdenServicio");
                 });
 #pragma warning restore 612, 618
         }

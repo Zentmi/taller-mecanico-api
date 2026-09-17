@@ -38,10 +38,11 @@ namespace TallerMecanico.Migrations
                 {
                     IdUsuario = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreUsuario = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     PrimerNombreUsuario = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PrimerApellidoUsuario = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RolUsuario = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    RolUsuario = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Activo = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
@@ -57,9 +58,9 @@ namespace TallerMecanico.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdOrdenServicio = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     FechaOrdenSolicitud = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    StatusOrdenServicio = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    UsuarioOrdenServicio = table.Column<int>(type: "int", nullable: false),
-                    ObervacionOrdenServicio = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    StatusOrden = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    UsuarioIdOrdenServicio = table.Column<int>(type: "int", nullable: false),
+                    ObservacionOrdenServicio = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     IdVehiculo = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -72,8 +73,8 @@ namespace TallerMecanico.Migrations
                         principalColumn: "IdVehiculo",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_OrdenesServicio_Usuarios_UsuarioOrdenServicio",
-                        column: x => x.UsuarioOrdenServicio,
+                        name: "FK_OrdenesServicio_Usuarios_UsuarioIdOrdenServicio",
+                        column: x => x.UsuarioIdOrdenServicio,
                         principalTable: "Usuarios",
                         principalColumn: "IdUsuario",
                         onDelete: ReferentialAction.Restrict);
@@ -119,9 +120,9 @@ namespace TallerMecanico.Migrations
                 column: "IdVehiculo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdenesServicio_UsuarioOrdenServicio",
+                name: "IX_OrdenesServicio_UsuarioIdOrdenServicio",
                 table: "OrdenesServicio",
-                column: "UsuarioOrdenServicio");
+                column: "UsuarioIdOrdenServicio");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Servicios_FkOrden",
@@ -132,6 +133,19 @@ namespace TallerMecanico.Migrations
                 name: "IX_Servicios_IdServicio",
                 table: "Servicios",
                 column: "IdServicio",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Unidades_PlacasVehiculo",
+                table: "Unidades",
+                column: "PlacasVehiculo",
+                unique: true,
+                filter: "[Activo] = 1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_NombreUsuario",
+                table: "Usuarios",
+                column: "NombreUsuario",
                 unique: true);
         }
 

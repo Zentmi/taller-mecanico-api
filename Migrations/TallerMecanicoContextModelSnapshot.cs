@@ -247,11 +247,13 @@ namespace TallerMecanico.Migrations
 
             modelBuilder.Entity("TallerMecanico.Models.Servicio", b =>
                 {
-                    b.HasOne("TallerMecanico.Models.OrdenServicio", null)
+                    b.HasOne("TallerMecanico.Models.OrdenServicio", "OrdenServicio")
                         .WithMany()
                         .HasForeignKey("FkOrden")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("OrdenServicio");
                 });
 #pragma warning restore 612, 618
         }
