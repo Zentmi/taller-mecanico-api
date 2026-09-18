@@ -36,8 +36,7 @@ public class AuthService
 
     public async Task<Usuario?> RegisterAsync(RegistroRequest request)
     {
-        var usuarioExiste = await _context.Usuarios
-            .AnyAsync(u => u.NombreUsuario == request.NombreUsuario);
+        var usuarioExiste = await _context.Usuarios.AnyAsync(u => u.NombreUsuario == request.NombreUsuario);
 
         if (usuarioExiste)
         {
@@ -67,8 +66,7 @@ public class AuthService
 
     public async Task<string?> LoginAsync(LoginRequest request)
     {
-        var usuario = await _context.Usuarios
-            .FirstOrDefaultAsync(u => u.NombreUsuario == request.NombreUsuario);
+        var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == request.NombreUsuario);
 
         if (usuario is null)
         {

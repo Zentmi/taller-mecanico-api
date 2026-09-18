@@ -51,6 +51,9 @@ public class ServicioConfiguration : IEntityTypeConfiguration<Servicio>
             .IsRequired();
 
         builder
-        .ToTable("Servicios", table => table.HasCheckConstraint("CK_Servicio_Costo", "[CostoServicio] >= 0"));
+            .ToTable("Servicios", table =>
+            table.HasCheckConstraint(
+            "CK_Servicio_Costo",
+            "[CostoServicio] >= 0"));
     }
 }

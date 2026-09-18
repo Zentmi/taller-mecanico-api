@@ -17,12 +17,12 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
 
         builder
             .Property(u => u.PrimerNombreUsuario)
-            .HasMaxLength(20)
+            .HasMaxLength(50)
             .IsRequired();
 
         builder
             .Property(u => u.PrimerApellidoUsuario)
-            .HasMaxLength(20)
+            .HasMaxLength(50)
             .IsRequired();
 
         builder

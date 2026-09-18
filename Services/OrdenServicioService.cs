@@ -23,10 +23,13 @@ public class OrdenServicioService
         int usuarioId)
     {
         var unidad = await _context.Unidades
-        .FirstOrDefaultAsync(u => u.IdVehiculo == request.IdVehiculo && u.Activo);
+            .FirstOrDefaultAsync(u => u.IdVehiculo == request.IdVehiculo);
 
         if (unidad is null)
-            return (null, "La unidad no existe o está inactiva.");
+            return (null, "La unidad no existe.");
+
+        if (!unidad.Activo)
+            return (null, "La unidad está inactiva.");
 
         var usuario = await _context.Usuarios
             .FirstOrDefaultAsync(u => u.IdUsuario == usuarioId);

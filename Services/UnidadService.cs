@@ -17,8 +17,15 @@ public class UnidadService
         _context = context;
     }
 
-    public async Task<Unidad> CrearAsync(CreateUnidadRequest request)
+    public async Task<(Unidad? Unidad, string? Error)> CrearAsync(
+        CreateUnidadRequest request)
     {
+        var placasExistentes = await _context.Unidades
+            .AnyAsync(u => u.PlacasVehiculo == request.PlacasVehiculo);
+
+        if (placasExistentes)
+            return (null, "Ya existe una unidad con esas placas.");
+
         var unidad = new Unidad
         {
             MarcaVehiculo = request.MarcaVehiculo,
@@ -33,7 +40,7 @@ public class UnidadService
 
         await _context.SaveChangesAsync();
 
-        return unidad;
+        return (unidad, null);
     }
 
     public async Task<List<Unidad>> ObtenerTodasAsync()
@@ -51,15 +58,23 @@ public class UnidadService
             .FirstOrDefaultAsync(u => u.IdVehiculo == id && u.Activo);
     }
 
-    public async Task<Unidad?> ActualizarAsync(
-    int id,
-    UpdateUnidadRequest request)
+    public async Task<(Unidad? Unidad, string? Error)> ActualizarAsync(
+        int id,
+        UpdateUnidadRequest request)
     {
         var unidad = await _context.Unidades
             .FirstOrDefaultAsync(u => u.IdVehiculo == id && u.Activo);
 
         if (unidad is null)
-            return null;
+            return (null, "La unidad no existe.");
+
+        var placasExistentes = await _context.Unidades
+            .AnyAsync(u =>
+                u.PlacasVehiculo == request.PlacasVehiculo &&
+                u.IdVehiculo != id);
+
+        if (placasExistentes)
+            return (null, "Ya existe otra unidad con esas placas.");
 
         unidad.MarcaVehiculo = request.MarcaVehiculo;
         unidad.ModeloVehiculo = request.ModeloVehiculo;
@@ -70,7 +85,7 @@ public class UnidadService
 
         await _context.SaveChangesAsync();
 
-        return unidad;
+        return (unidad, null);
     }
 
     public async Task<bool> DesactivarAsync(int id)

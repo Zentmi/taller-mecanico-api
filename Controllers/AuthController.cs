@@ -1,7 +1,4 @@
 
-
-
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TallerMecanico.DTOs.Auth;
@@ -47,9 +44,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var usuario = await _authService.LoginAsync(request);
+        var token = await _authService.LoginAsync(request);
 
-        if (usuario is null)
+        if (token is null)
         {
             return Unauthorized(new
             {
@@ -59,20 +56,7 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            token = usuario
-        });
-    }
-
-    [Authorize]
-    [HttpGet("me")]
-    public IActionResult Me()
-    {
-        return Ok(new
-        {
-            mensaje = "Estás autenticado.",
-            usuario = User.Identity?.Name,
-            idUsuario = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-            rol = User.FindFirst(ClaimTypes.Role)?.Value
+            token
         });
     }
 

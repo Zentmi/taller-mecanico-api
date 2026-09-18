@@ -40,8 +40,7 @@ public class UnidadConfiguration : IEntityTypeConfiguration<Unidad>
 
         builder
             .HasIndex(u => u.PlacasVehiculo)
-            .IsUnique()
-            .HasFilter("[Activo] = 1");
+            .IsUnique();
 
         builder
             .Property(u => u.FechaRegistroVehiculo)

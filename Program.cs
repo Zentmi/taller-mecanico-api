@@ -14,46 +14,23 @@ using Microsoft.OpenApi;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(
             new JsonStringEnumConverter());
     });
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Introduce el JWT obtenido mediante /api/Auth/login."
-    });
 
-    options.AddSecurityRequirement(document =>
-        new OpenApiSecurityRequirement
-        {
-            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
-        });
-});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddDbContext<TallerMecanicoContext>(options =>
-    options.UseSqlServer(
+builder.Services.AddDbContext<TallerMecanicoContext>(options => options.UseSqlServer
+(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var jwtSettings = builder.Configuration
-    .GetSection("Jwt")
-    .Get<JwtOptions>();
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 
-builder.Services.Configure<JwtOptions>(
-builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -78,6 +55,23 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UnidadService>();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Introduce el JWT obtenido mediante /api/Auth/login."
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
+});
 builder.Services.AddScoped<OrdenServicioService>();
 builder.Services.AddScoped<ServicioService>();
 

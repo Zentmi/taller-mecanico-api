@@ -21,7 +21,8 @@ public class ServicioService
     public async Task<Servicio?> ObtenerPorIdAsync(int idServicio)
     {
         return await _context.Servicios
-            .FirstOrDefaultAsync(s => s.PkServicio == idServicio);
+           .AsNoTracking()
+           .FirstOrDefaultAsync(s => s.PkServicio == idServicio);
     }
 
     public async Task<List<Servicio>> ObtenerTodosAsync()

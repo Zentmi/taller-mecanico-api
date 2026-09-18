@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TallerMecanico.DTOs.Ordenes;
+using TallerMecanico.Models;
 using TallerMecanico.Services;
 
 namespace TallerMecanico.Controllers;
@@ -40,21 +41,20 @@ public class OrdenServicioController : ControllerBase
 
         if (orden is null)
         {
-            return BadRequest(new
+            if (error == "La unidad no existe.")
+            {
+                return NotFound(new
+                {
+                    message = error
+                });
+            }
+
+            return Conflict(new
             {
                 message = error
             });
         }
-
-        return Ok(new OrdenServicioResponse
-        {
-            PkOrden = orden.PkOrden,
-            IdOrdenServicio = orden.IdOrdenServicio,
-            FechaOrdenSolicitud = orden.FechaOrdenSolicitud,
-            StatusOrden = orden.StatusOrden.ToString(),
-            ObservacionOrdenServicio = orden.ObservacionOrdenServicio,
-            IdVehiculo = orden.IdVehiculo
-        });
+        return Ok(MapearRespuesta(orden));
     }
 
     [Authorize(Roles = "Administrador")]
@@ -65,38 +65,30 @@ public class OrdenServicioController : ControllerBase
 
         if (orden is null)
         {
-            return BadRequest(new
+            if (error == "La orden de servicio no existe.")
+            {
+                return NotFound(new
+                {
+                    message = error
+                });
+            }
+
+            return Conflict(new
             {
                 message = error
             });
         }
 
-        return Ok(new OrdenServicioResponse
-        {
-            PkOrden = orden.PkOrden,
-            IdOrdenServicio = orden.IdOrdenServicio,
-            FechaOrdenSolicitud = orden.FechaOrdenSolicitud,
-            StatusOrden = orden.StatusOrden.ToString(),
-            ObservacionOrdenServicio = orden.ObservacionOrdenServicio,
-            IdVehiculo = orden.IdVehiculo
-        });
-    }
 
+        return Ok(MapearRespuesta(orden));
+    }
     [Authorize]
     [HttpGet]
     public async Task<IActionResult> ObtenerTodos()
     {
         var ordenes = await _ordenServicioService.ObtenerTodosAsync();
 
-        var response = ordenes.Select(orden => new OrdenServicioResponse
-        {
-            PkOrden = orden.PkOrden,
-            IdOrdenServicio = orden.IdOrdenServicio,
-            FechaOrdenSolicitud = orden.FechaOrdenSolicitud,
-            StatusOrden = orden.StatusOrden.ToString(),
-            ObservacionOrdenServicio = orden.ObservacionOrdenServicio,
-            IdVehiculo = orden.IdVehiculo
-        });
+        var response = ordenes.Select(MapearRespuesta);
 
         return Ok(response);
     }
@@ -116,7 +108,12 @@ public class OrdenServicioController : ControllerBase
             });
         }
 
-        return Ok(new OrdenServicioResponse
+        return Ok(MapearRespuesta(orden));
+    }
+
+    private static OrdenServicioResponse MapearRespuesta(OrdenServicio orden)
+    {
+        return new OrdenServicioResponse
         {
             PkOrden = orden.PkOrden,
             IdOrdenServicio = orden.IdOrdenServicio,
@@ -124,6 +121,6 @@ public class OrdenServicioController : ControllerBase
             StatusOrden = orden.StatusOrden.ToString(),
             ObservacionOrdenServicio = orden.ObservacionOrdenServicio,
             IdVehiculo = orden.IdVehiculo
-        });
+        };
     }
 }

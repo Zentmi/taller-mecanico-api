@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TallerMecanico.DTOs.Servicios;
+using TallerMecanico.Models;
 using TallerMecanico.Services;
 
 namespace TallerMecanico.Controllers;
@@ -24,23 +25,10 @@ public class ServicioController : ControllerBase
     {
         var servicios = await _servicioService.ObtenerTodosAsync();
 
-        var response = servicios.Select(servicio => new ServicioResponse
-        {
-            PkServicio = servicio.PkServicio,
-            IdServicio = servicio.IdServicio,
-            PkOrden = servicio.PkOrden,
-            TipoServicio = servicio.TipoServicio,
-            DetalleServicio = servicio.DetalleServicio,
-            CostoServicio = servicio.CostoServicio,
-            FechaInicioServicio = servicio.FechaInicioServicio,
-            FechaFinServicio = servicio.FechaFinServicio,
-            FechaCancelacionServicio = servicio.FechaCancelacionServicio,
-            StatusServicio = servicio.StatusServicio.ToString()
-        });
+        var response = servicios.Select(MapearRespuesta);
 
         return Ok(response);
     }
-
 
     [Authorize]
     [HttpGet("{idServicio}")]
@@ -56,19 +44,7 @@ public class ServicioController : ControllerBase
             });
         }
 
-        return Ok(new ServicioResponse
-        {
-            PkServicio = servicio.PkServicio,
-            IdServicio = servicio.IdServicio,
-            PkOrden = servicio.PkOrden,
-            TipoServicio = servicio.TipoServicio,
-            DetalleServicio = servicio.DetalleServicio,
-            CostoServicio = servicio.CostoServicio,
-            FechaInicioServicio = servicio.FechaInicioServicio,
-            FechaFinServicio = servicio.FechaFinServicio,
-            FechaCancelacionServicio = servicio.FechaCancelacionServicio,
-            StatusServicio = servicio.StatusServicio.ToString()
-        });
+        return Ok(MapearRespuesta(servicio));
     }
 
     [Authorize(Roles = "Administrador")]
@@ -79,32 +55,28 @@ public class ServicioController : ControllerBase
 
         if (servicio is null)
         {
-            return BadRequest(new
+            if (error == "La orden de servicio no existe.")
+            {
+                return NotFound(new
+                {
+                    message = error
+                });
+            }
+
+            return Conflict(new
             {
                 message = error
             });
         }
 
-        return Ok(new ServicioResponse
-        {
-            PkServicio = servicio.PkServicio,
-            IdServicio = servicio.IdServicio,
-            PkOrden = servicio.PkOrden,
-            TipoServicio = servicio.TipoServicio,
-            DetalleServicio = servicio.DetalleServicio,
-            CostoServicio = servicio.CostoServicio,
-            FechaInicioServicio = servicio.FechaInicioServicio,
-            FechaFinServicio = servicio.FechaFinServicio,
-            FechaCancelacionServicio = servicio.FechaCancelacionServicio,
-            StatusServicio = servicio.StatusServicio.ToString()
-        });
+        return Ok(MapearRespuesta(servicio));
     }
 
     [Authorize(Roles = "Administrador")]
     [HttpPatch("{idServicio}/estado")]
     public async Task<IActionResult> CambiarEstado(
-    int idServicio,
-    UpdateServicioStatusRequest request)
+        int idServicio,
+        UpdateServicioStatusRequest request)
     {
         var (servicio, error) = await _servicioService.CambiarEstadoAsync(
             idServicio,
@@ -112,13 +84,26 @@ public class ServicioController : ControllerBase
 
         if (servicio is null)
         {
-            return BadRequest(new
+            if (error == "El servicio no existe." ||
+                error == "La orden de servicio no existe.")
+            {
+                return NotFound(new
+                {
+                    message = error
+                });
+            }
+
+            return Conflict(new
             {
                 message = error
             });
         }
 
-        return Ok(new ServicioResponse
+        return Ok(MapearRespuesta(servicio));
+    }
+    private static ServicioResponse MapearRespuesta(Servicio servicio)
+    {
+        return new ServicioResponse
         {
             PkServicio = servicio.PkServicio,
             IdServicio = servicio.IdServicio,
@@ -130,6 +115,6 @@ public class ServicioController : ControllerBase
             FechaFinServicio = servicio.FechaFinServicio,
             FechaCancelacionServicio = servicio.FechaCancelacionServicio,
             StatusServicio = servicio.StatusServicio.ToString()
-        });
+        };
     }
 }
