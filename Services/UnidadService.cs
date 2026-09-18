@@ -1,6 +1,6 @@
 
 
-
+using TallerMecanico.DTOs.Common;
 using Microsoft.EntityFrameworkCore;
 using TallerMecanico.Data;
 using TallerMecanico.DTOs.Unidades;
@@ -43,12 +43,33 @@ public class UnidadService
         return (unidad, null);
     }
 
-    public async Task<List<Unidad>> ObtenerTodasAsync()
+    public async Task<PagedResponse<Unidad>> ObtenerTodasAsync(
+    int page,
+    int pageSize)
     {
-        return await _context.Unidades
+        var query = _context.Unidades
             .AsNoTracking()
             .Where(u => u.Activo)
+            .OrderBy(u => u.IdVehiculo);
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        var totalPages = (int)Math.Ceiling(
+            totalItems / (double)pageSize);
+
+        return new PagedResponse<Unidad>
+        {
+            Items = items,
+            Page = page,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
+        };
     }
 
     public async Task<Unidad?> ObtenerPorIdAsync(int id)

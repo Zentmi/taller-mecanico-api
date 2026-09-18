@@ -1,9 +1,9 @@
 
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using TallerMecanico.DTOs.Common;
 using TallerMecanico.DTOs.Unidades;
 using TallerMecanico.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TallerMecanico.Services;
 
 namespace TallerMecanico.Controllers;
@@ -38,11 +38,38 @@ public class UnidadController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> ObtenerTodas()
+    public async Task<IActionResult> ObtenerTodas(
+        int page = 1,
+        int pageSize = 10)
     {
-        var unidades = await _unidadService.ObtenerTodasAsync();
+        if (page < 1)
+        {
+            return BadRequest(new
+            {
+                message = "El número de página debe ser mayor o igual a 1."
+            });
+        }
 
-        var response = unidades.Select(MapearRespuesta);
+        if (pageSize < 1 || pageSize > 100)
+        {
+            return BadRequest(new
+            {
+                message = "El tamaño de página debe estar entre 1 y 100."
+            });
+        }
+
+        var resultado = await _unidadService.ObtenerTodasAsync(
+            page,
+            pageSize);
+
+        var response = new PagedResponse<UnidadResponse>
+        {
+            Items = resultado.Items.Select(MapearRespuesta).ToList(),
+            Page = resultado.Page,
+            PageSize = resultado.PageSize,
+            TotalItems = resultado.TotalItems,
+            TotalPages = resultado.TotalPages
+        };
 
         return Ok(response);
     }

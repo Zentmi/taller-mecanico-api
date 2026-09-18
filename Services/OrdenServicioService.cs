@@ -3,6 +3,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TallerMecanico.Data;
+using TallerMecanico.DTOs.Common;
 using TallerMecanico.DTOs.Ordenes;
 using TallerMecanico.Models;
 using TallerMecanico.Models.Enums;
@@ -64,11 +65,32 @@ public class OrdenServicioService
             .FirstOrDefaultAsync(o => o.PkOrden == idOrden);
     }
 
-    public async Task<List<OrdenServicio>> ObtenerTodosAsync()
+    public async Task<PagedResponse<OrdenServicio>> ObtenerTodosAsync(
+    int page,
+    int pageSize)
     {
-        return await _context.OrdenesServicio
+        var query = _context.OrdenesServicio
             .AsNoTracking()
+            .OrderBy(o => o.PkOrden);
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        var totalPages = (int)Math.Ceiling(
+            totalItems / (double)pageSize);
+
+        return new PagedResponse<OrdenServicio>
+        {
+            Items = items,
+            Page = page,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
+        };
     }
 
     public async Task<(OrdenServicio? Orden, string? Error)> CancelarAsync(

@@ -3,6 +3,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TallerMecanico.Data;
+using TallerMecanico.DTOs.Common;
 using TallerMecanico.DTOs.Servicios;
 using TallerMecanico.Models;
 using TallerMecanico.Models.Enums;
@@ -25,11 +26,32 @@ public class ServicioService
            .FirstOrDefaultAsync(s => s.PkServicio == idServicio);
     }
 
-    public async Task<List<Servicio>> ObtenerTodosAsync()
+    public async Task<PagedResponse<Servicio>> ObtenerTodosAsync(
+        int page,
+        int pageSize)
     {
-        return await _context.Servicios
+        var query = _context.Servicios
             .AsNoTracking()
+            .OrderBy(s => s.PkServicio);
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        var totalPages = (int)Math.Ceiling(
+            totalItems / (double)pageSize);
+
+        return new PagedResponse<Servicio>
+        {
+            Items = items,
+            Page = page,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
+        };
     }
 
     public async Task<(Servicio? Servicio, string? Error)> CrearAsync(
